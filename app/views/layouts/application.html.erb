@@ -98,8 +98,12 @@
       </article>
       <a class="close-reveal-modal">&#215;</a>
     </div>
+    </div>
 
-    <%= javascript_include_tag 'application' %>
+
+   <%= javascript_include_tag 'application' %>
+
+   <%= yield :js %>
 
   </body>
 </html>

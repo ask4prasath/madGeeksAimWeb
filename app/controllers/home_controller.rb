@@ -6,16 +6,18 @@ class HomeController < ApplicationController
 
 
   def index
-    @agents = User.agents
 
-    params[:status] ||= 'open'
-
-    @labels = Ticket.active_labels(params[:status])
-    unless current_user.agent?
-      @labels = current_user.labels & @labels
-    end
-
-    @tickets = Ticket.all
+    @result_json = [{"count" => "100", "status" => "open"}, {"count" => "20", "status" => "closed"}]
+    # @agents = User.agents
+    #
+    # params[:status] ||= 'open'
+    #
+    # @labels = Ticket.active_labels(params[:status])
+    # unless current_user.agent?
+    #   @labels = current_user.labels & @labels
+    # end
+    #
+    # @tickets = Ticket.all
 
     # @tickets = @tickets.by_status(params[:status])
     # .search(params[:q])

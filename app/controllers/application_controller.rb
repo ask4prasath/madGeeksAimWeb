@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  # protect_from_forgery
 
   # before_filter :authenticate_user!
-  before_filter :set_locale
 
-  check_authorization unless: :devise_controller?
+  # check_authorization unless: :devise_controller?
 
   rescue_from CanCan::AccessDenied do |exception|
     if Rails.env == :production

@@ -54,6 +54,11 @@ module Brimir
 
     config.assets.initialize_on_precompile = false
 
+    config.action_dispatch.default_headers.merge!({
+                                                      'Access-Control-Allow-Origin' => '*',
+                                                      'Access-Control-Request-Method' => '*'
+                                                  })
+
     I18n.enforce_available_locales = true
   end
 end

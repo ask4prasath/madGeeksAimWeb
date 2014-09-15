@@ -17,6 +17,7 @@
 class Ticket < ActiveRecord::Base
   include CreateFromUser
 
+
   validates_presence_of :user_id
 
   belongs_to :user
@@ -32,6 +33,8 @@ class Ticket < ActiveRecord::Base
 
   enum status: [:open, :closed, :deleted]
   enum priority: [:unknown, :low, :medium, :high]
+
+  self.per_page = 10
 
   def self.active_labels(status)
     label_ids = where(status: Ticket.statuses[status])

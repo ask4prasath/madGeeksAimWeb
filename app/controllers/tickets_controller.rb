@@ -17,7 +17,8 @@
 class TicketsController < ApplicationController
 
   # before_filter :authenticate_user!, except: {:format => :json}
-  load_and_authorize_resource :ticket, except: :create
+  load_resource :ticket, except: :create
+  skip_authorization_check
   # skip_authorization_check only: :create
 
   # this is needed for brimir integration in other sites
@@ -25,11 +26,16 @@ class TicketsController < ApplicationController
 
   def show
     @agents = User.agents
-
+    #
     @reply = @ticket.replies.new(user: current_user)
     @reply.set_default_notifications!
+    #
+    # @labeling = Labeling.new(labelable: @ticket)
 
-    @labeling = Labeling.new(labelable: @ticket)
+    respond_to do |format|
+      format.html
+      format.json { render :xml => @ticket.to_json }
+    end
   end
 
   def index
@@ -49,7 +55,7 @@ class TicketsController < ApplicationController
     #   .page(params[:page])
     #   .ordered
 
-    @tickets = Ticket.all
+    @tickets = Ticket.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html
@@ -64,19 +70,19 @@ class TicketsController < ApplicationController
       if @ticket.update_attributes(ticket_params)
 
         # assignee set and not same as user who modifies
-        if !@ticket.assignee.nil? && @ticket.assignee.id != current_user.id
-
-          if @ticket.previous_changes.include? :assignee_id
-            TicketMailer.notify_assigned(@ticket).deliver
-
-          elsif @ticket.previous_changes.include? :status
-            TicketMailer.notify_status_changed(@ticket).deliver
-
-          elsif @ticket.previous_changes.include? :priority
-            TicketMailer.notify_priority_changed(@ticket).deliver
-          end
-
-        end
+        # if !@ticket.assignee.nil? && @ticket.assignee.id != current_user.id
+        #
+        #   if @ticket.previous_changes.include? :assignee_id
+        #     TicketMailer.notify_assigned(@ticket).deliver
+        #
+        #   elsif @ticket.previous_changes.include? :status
+        #     TicketMailer.notify_status_changed(@ticket).deliver
+        #
+        #   elsif @ticket.previous_changes.include? :priority
+        #     TicketMailer.notify_priority_changed(@ticket).deliver
+        #   end
+        #
+        # end
 
         format.html {
           redirect_to @ticket, notice: I18n::translate(:ticket_updated)
@@ -122,20 +128,20 @@ class TicketsController < ApplicationController
 
     if @ticket.save
 
-      if current_user.nil?
-        user = @ticket.user
-      else
-        user = current_user
-      end
+      # if current_user.nil?
+      #   user = @ticket.user
+      # else
+      #   user = current_user
+      # end
 
-      Rule.apply_all(@ticket)
+      # Rule.apply_all(@ticket)
 
       # where user notifications added?
-      if @ticket.notified_users.count == 0
-        @ticket.set_default_notifications!(user)
-      end
+      # if @ticket.notified_users.count == 0
+      #   @ticket.set_default_notifications!(user)
+      # end
 
-      NotificationMailer.new_ticket(@ticket).deliver
+      # NotificationMailer.new_ticket(@ticket).deliver
     end
 
     respond_to do |format|
@@ -165,22 +171,14 @@ class TicketsController < ApplicationController
 
   protected
     def ticket_params
-      if !current_user.nil? && current_user.agent?
         params.require(:ticket).permit(
             :from,
             :content,
             :subject,
             :status,
             :assignee_id,
-            :priority,
-            :message_id)
-      else
-        params.require(:ticket).permit(
-            :from,
-            :content,
-            :subject,
-            :priority)
-      end
+            :severity,
+            :phase)
     end
 
     def allow_cors

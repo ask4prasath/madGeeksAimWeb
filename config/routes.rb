@@ -15,10 +15,9 @@ Brimir::Application.routes.draw do
   resources :replies, only: [:create, :new]
   get '/attachments/:id/:format' => 'attachments#show'
 
-  root :to => 'home#index'
-  get 'tickets' => 'tickets#index'
+  root :to => 'tickets#index'
 
-	namespace :api do
+  namespace :api do
 		namespace :v1 do
 			resources :tickets, only: [ :index, :show ]
       resources :sessions, only: [ :create ]

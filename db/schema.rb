@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140915073533) do
+ActiveRecord::Schema.define(version: 20140915174757) do
 
   create_table "attachments", force: true do |t|
     t.integer  "attachable_id"
@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 20140915073533) do
     t.string   "content_type", default: "html"
     t.integer  "status",       default: 0,      null: false
     t.integer  "priority",     default: 0,      null: false
+    t.string   "severity"
+    t.string   "phase"
   end
 
   add_index "tickets", ["assignee_id"], name: "index_tickets_on_assignee_id"
