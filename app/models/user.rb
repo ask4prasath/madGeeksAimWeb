@@ -39,4 +39,12 @@ class User < ActiveRecord::Base
         .where(notify: true)
   end
 
+  def tickets_count
+    tickets.count
+  end
+
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
+
 end

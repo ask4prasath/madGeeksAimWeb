@@ -16,9 +16,9 @@
 
 class TicketsController < ApplicationController
 
-  before_filter :authenticate_user!, except: [:create, :new]
+  # before_filter :authenticate_user!, except: {:format => :json}
   load_and_authorize_resource :ticket, except: :create
-  skip_authorization_check only: :create
+  # skip_authorization_check only: :create
 
   # this is needed for brimir integration in other sites
   before_filter :allow_cors, only: [:create, :new]
@@ -38,16 +38,25 @@ class TicketsController < ApplicationController
     params[:status] ||= 'open'
 
     @labels = Ticket.active_labels(params[:status])
-    unless current_user.agent?
-      @labels = current_user.labels & @labels
+    # unless current_user.agent?
+    #   @labels = current_user.labels & @labels
+    # end
+
+    # @tickets = @tickets.by_status(params[:status])
+    #   .search(params[:q])
+    #   .by_label_id(params[:label_id])
+    #   .filter_by_assignee_id(params[:assignee_id])
+    #   .page(params[:page])
+    #   .ordered
+
+    @tickets = Ticket.all
+
+    respond_to do |format|
+      format.html
+      format.json { render :xml => @tickets.to_json }
     end
 
-    @tickets = @tickets.by_status(params[:status])
-      .search(params[:q])
-      .by_label_id(params[:label_id])
-      .filter_by_assignee_id(params[:assignee_id])
-      .page(params[:page])
-      .ordered
+
   end
 
   def update
@@ -108,11 +117,8 @@ class TicketsController < ApplicationController
   end
 
   def create
-    if params[:format] == 'json'
-      @ticket = TicketMailer.receive(params[:message])
-    else
-      @ticket = Ticket.new(ticket_params)
-    end
+
+    @ticket = Ticket.new(ticket_params)
 
     if @ticket.save
 

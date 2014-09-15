@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140829124853) do
+ActiveRecord::Schema.define(version: 20140915073533) do
 
   create_table "attachments", force: true do |t|
     t.integer  "attachable_id"
@@ -116,6 +116,8 @@ ActiveRecord::Schema.define(version: 20140829124853) do
     t.text     "signature"
     t.boolean  "notify",                 default: true
     t.string   "authentication_token"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

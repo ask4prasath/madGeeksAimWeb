@@ -43,7 +43,7 @@ end
 
 group :production do
   # PostgreSQL for production
-  gem 'pg'
+  gem 'mysql2'
 end
 
 # authentication

@@ -1,5 +1,7 @@
 Brimir::Application.routes.draw do
 
+  get 'home/index'
+
   devise_for :users
 
   resources :users
@@ -13,7 +15,8 @@ Brimir::Application.routes.draw do
   resources :replies, only: [:create, :new]
   get '/attachments/:id/:format' => 'attachments#show'
 
-  root :to => 'tickets#index'
+  root :to => 'home#index'
+  get 'tickets' => 'tickets#index'
 
 	namespace :api do
 		namespace :v1 do
