@@ -10,7 +10,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : 'Brimir' %></title>
+    <title><%= content_for?(:title) ? yield(:title) : '' %></title>
 
     <%= favicon_link_tag 'favicon.png' %>
     <%= stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' %>
@@ -20,17 +20,27 @@
 
   <body<%= ' style="background: #333;"'.html_safe if user_signed_in? %>>
 
+    <%= image_tag "logo.png", style: "width: 150px; padding-top: 10px;" %>
+
     <div class="row collapse">
       <% if user_signed_in? %>
         <aside class="medium-3 large-2 columns">
           <div style="padding: 30px 0.66667rem 10px 0.66667rem">
-            <%= link_to t(:new_ticket), new_ticket_path, class: 'button expand radius' %>
+            <%= link_to "New Incident", new_ticket_path, class: 'button expand radius' %>
           </div>
           <ul class="off-canvas-list">
             <li>
               <%= active_elem_if :a, params[:status] == 'open' &&
+                      params[:assignee_id].to_i == 0,
+                                 href: '/dashboard' do %>
+
+                  <span class="fa fa-home"></span><%= "Dashboard" %>
+              <% end %>
+            </li>
+            <li>
+              <%= active_elem_if :a, params[:status] == 'open' &&
                   params[:assignee_id].to_i == 0,
-                  href: root_path do %>
+                  href: "/inbox" do %>
 
                 <span class="fa fa-inbox"></span><%= t(:inbox) %>
               <% end %>
@@ -43,15 +53,21 @@
               <% end %>
             </li>
             <li>
-              <%= active_elem_if :a, params[:status] == 'closed',
-                   href: tickets_path(status: 'closed') do %>
-                <span class="fa fa-check"></span><%= t(:closed) %>
-              <% end %>
-            </li>
-            <li>
               <%= active_elem_if :a, params[:status] == 'deleted',
                   href: tickets_path(status: 'deleted') do %>
                 <span class="fa fa-trash-o"></span><%= t(:trashed) %>
+              <% end %>
+            </li>
+            <li>
+              <%= active_elem_if :a, params[:status] == 'closed',
+                                 href: tickets_path(status: 'closed') do %>
+                  <span class="fa fa-check"></span><%= t(:closed) %>
+              <% end %>
+            </li>
+            <li>
+              <%= active_elem_if :a, params[:status] == 'closed',
+                                 href: "/etherpad" do %>
+                  <span class="fa fa-check"></span><%= "Etherpad" %>
               <% end %>
             </li>
           </ul>

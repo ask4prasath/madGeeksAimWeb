@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class NotificationMailer < ActionMailer::Base
+  default from: "lmac.378512345@gmail.com"
 
   add_template_helper HtmlTextHelper
 
   def new_ticket(ticket)
-    to = users_to_addresses(ticket.notified_users)
+    to = 'pvenkata@akamai.com'
 
     if to.size == 0
       # nothing to send

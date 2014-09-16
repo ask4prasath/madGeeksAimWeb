@@ -1,6 +1,11 @@
 Brimir::Application.routes.draw do
 
-  get 'home/index'
+  get 'dashboard' => 'home#index'
+  get 'etherpad' => 'users#etherpad'
+  get 'chat' => 'users#chat'
+  get 'inbox' => 'tickets#index'
+
+
 
   devise_for :users
 
@@ -15,7 +20,8 @@ Brimir::Application.routes.draw do
   resources :replies, only: [:create, :new]
   get '/attachments/:id/:format' => 'attachments#show'
 
-  root :to => 'tickets#index'
+
+  root :to => 'home#index'
 
   namespace :api do
 		namespace :v1 do

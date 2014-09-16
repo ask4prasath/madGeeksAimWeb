@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
 
   def index
-
+    @tickets = Ticket.paginate(:page => params[:page]).order("created_at desc")
     @result_json = [{"count" => "100", "status" => "open"}, {"count" => "20", "status" => "closed"}]
     # @agents = User.agents
     #

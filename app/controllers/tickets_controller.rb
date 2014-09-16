@@ -16,7 +16,7 @@
 
 class TicketsController < ApplicationController
 
-  # before_filter :authenticate_user!, except: {:format => :json}
+  before_filter :authenticate_user!
   load_resource :ticket, except: :create
   skip_authorization_check
   # skip_authorization_check only: :create
@@ -48,14 +48,14 @@ class TicketsController < ApplicationController
     #   @labels = current_user.labels & @labels
     # end
 
-    # @tickets = @tickets.by_status(params[:status])
-    #   .search(params[:q])
-    #   .by_label_id(params[:label_id])
-    #   .filter_by_assignee_id(params[:assignee_id])
-    #   .page(params[:page])
-    #   .ordered
+    @tickets = @tickets.by_status(params[:status])
+      .search(params[:q])
+      .by_label_id(params[:label_id])
+      .filter_by_assignee_id(params[:assignee_id])
+      .page(params[:page])
+      .ordered
 
-    @tickets = Ticket.paginate(:page => params[:page])
+    # @tickets = Ticket.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html
@@ -141,7 +141,7 @@ class TicketsController < ApplicationController
       #   @ticket.set_default_notifications!(user)
       # end
 
-      # NotificationMailer.new_ticket(@ticket).deliver
+      NotificationMailer.new_ticket(@ticket).deliver
     end
 
     respond_to do |format|

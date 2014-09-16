@@ -18,6 +18,7 @@
 //= require tickets
 //= require etherpad
 
+
 (function() {
 
   var dialog;

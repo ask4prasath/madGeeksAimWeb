@@ -36,6 +36,7 @@ class Ticket < ActiveRecord::Base
 
   self.per_page = 10
 
+
   def self.active_labels(status)
     label_ids = where(status: Ticket.statuses[status])
         .joins(:labelings)

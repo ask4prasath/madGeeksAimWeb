@@ -1,4 +1,4 @@
-agent = User.where(email: 'agent@getbrimir.com').first_or_create({ email: 'agent@getbrimir.com', password: 'testtest', password_confirmation: 'testtest' })
+agent = User.where(email: 'pvenkata@akamai.com').first_or_create({ email: 'pvenkata@akamai.com', password: 'testtest', password_confirmation: 'testtest' })
 agent.agent = true
 agent.save!
 

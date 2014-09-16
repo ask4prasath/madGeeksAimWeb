@@ -2,9 +2,9 @@
 
   $.fn.pad = function( options ) {
     var settings = {
-      'host'              : 'http://172.19.220.137:9001',
+      'host'              : 'http://172.19.220.122:9001',
       'baseUrl'           : '/p/',
-      'showControls'      : false,
+      'showControls'      : true,
       'showChat'          : false,
       'showLineNumbers'   : false,
       'userName'          : 'unnamed',
